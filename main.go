@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 	"github.com/gin-gonic/gin"
-  "golang-restaurant-management/controllers"
-  "golang-restaurant-management/database"
-  "golang-restaurant-management/middleware"
-  "golang-restaurant-management/routes"
+	"golang-restaurant-management/controllers"
+  	"golang-restaurant-management/database"
+ 	"golang-restaurant-management/middleware"
+ 	"golang-restaurant-management/routes"
 )
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
