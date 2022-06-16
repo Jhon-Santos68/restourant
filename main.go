@@ -2,8 +2,11 @@ package main
 
 import (
 	"os"
-
 	"github.com/gin-gonic/gin"
+  "golang-restaurant-management/controllers"
+  "golang-restaurant-management/database"
+  "golang-restaurant-management/middleware"
+  "golang-restaurant-management/routes"
 )
 
 func main() {
