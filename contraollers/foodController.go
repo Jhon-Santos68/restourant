@@ -6,11 +6,13 @@ import (
   "golang-restaurant-management/models"
   "net/http"
   "time"
+  "fmt"
   
   "github.com/gin-gonic/gin"
   "go.mongodb.org/mongo-driver/mongo"
   "gopkg.in/bluesuncorp/validator.v5"
   "go.mongodb.org/mongo-driver/bson"
+  "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
@@ -46,9 +48,36 @@ func CreateFood() gin.HandlerFunc{
 
     if err := c.BindJSON(&food); err != nil {
       c.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
+      return
     }
 
-    validate.Struct
+    validationError := validate.Struct(food)
+    if validationError != nil {
+      c.JSON(http.StatusBadRequest, gin.H{"error":validationError.Error()})
+      return
+    }
+    err := menuCollection.FindOne(ctx, bson.M{"menu_id": food.Menu_id}).Decode(&menu)
+    defer cancel()
+    if err != nil {
+      msg := fmt.Sprintf("menu was not found")
+      c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+      return
+    }
+    food.Created_at, _ = time.Parse(time.RFC3339, time.Now()).Format(time.RFC3339)
+    food.Updated_at, _ = time.Parse(time.RFC3339, time.Now()).Format(time.RFC3339)
+    food.ID = primitive.NewObjectID()
+    food.Food_id = food.ID.Hex()
+    var num = toFixed(*food.Price, 2)
+    food.Price = &num
+
+    result, insertErr := foodCollection.InsertOne(ctx, food)
+    if insertErr != nil {
+      msg := fmt.Sprintf("Food item was not created")
+      c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
+      return
+    }
+    defer cancel()
+    c.JSON(http.StatusOK, result)
   }
 }
 
