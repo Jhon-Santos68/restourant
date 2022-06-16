@@ -1,18 +1,18 @@
-package controller 
+package controller
 
 import (
-  "context"
-  "golang-restaurant-management/database"
-  "golang-restaurant-management/models"
-  "net/http"
-  "time"
-  "fmt"
-  
-  "github.com/gin-gonic/gin"
-  "go.mongodb.org/mongo-driver/mongo"
-  "gopkg.in/bluesuncorp/validator.v5"
-  "go.mongodb.org/mongo-driver/bson"
-  "go.mongodb.org/mongo-driver/bson/primitive"
+	"context"
+	"fmt"
+	"golang-restaurant-management/database"
+	"golang-restaurant-management/models"
+	"net/http"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"gopkg.in/bluesuncorp/validator.v5"
 )
 
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
