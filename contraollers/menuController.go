@@ -82,7 +82,7 @@ func CreateMenu() gin.HandlerFunc{
     defer cancel()
   }
 }
-
+// ozgardi
 func inTimeSpan(start, end, check, time.Time) bool {
   return start.After(time.Now()) && end.After(start)
 }
